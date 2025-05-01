@@ -1,0 +1,908 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Psychology Education Project</title>
+    <style>
+        :root {
+            --primary: #6200ea;
+            --secondary: #03dac6;
+            --accent: #ff4081;
+            --background: #121212;
+            --surface: #1e1e1e;
+            --text: #ffffff;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+        
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            overflow-x: hidden;
+            overflow-y: auto;
+            min-height: 100vh;
+        }
+        
+        header {
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--accent);
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .section {
+            margin-bottom: 60px;
+            padding: 30px;
+            background-color: var(--surface);
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .section-title {
+            font-size: 2rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .section-content {
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+        
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin: 10px;
+        }
+        
+        .button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        /* Brain Visualization */
+        .brain-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+            margin: 30px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            background-color: rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .brain {
+            width: 200px;
+            height: 200px;
+            background-color: var(--primary);
+            border-radius: 50%;
+            animation: pulse 3s infinite alternate;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 3rem;
+        }
+        
+        /* Focus Challenge Game */
+        .game-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 30px auto;
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        
+        .focus-meter {
+            width: 100%;
+            height: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .focus-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transition: width 0.3s;
+        }
+        
+        .time-meter {
+            width: 100%;
+            height: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .time-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--primary));
+            transition: width 0.1s linear;
+        }
+        
+        .task {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .count-display {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .distractions {
+            min-height: 150px;
+            position: relative;
+        }
+        
+        .distraction {
+            position: absolute;
+            padding: 10px 15px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 5px;
+            cursor: pointer;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            transition: transform 0.2s, opacity 0.2s;
+        }
+        
+        .distraction:hover {
+            transform: scale(1.05);
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .game-explanation {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            display: none;
+        }
+        
+        /* Treatment Cards */
+        .card-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        
+        .card {
+            width: 300px;
+            padding: 20px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 10px;
+            color: var(--secondary);
+        }
+        
+        .card-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        /* Modal Overlay */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .modal-content {
+            width: 90%;
+            max-width: 600px;
+            background-color: var(--surface);
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            position: relative;
+            transform: scale(0.9);
+            transition: transform 0.3s;
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: scale(1);
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+        
+        .modal-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: var(--secondary);
+        }
+        
+        .modal-body {
+            line-height: 1.6;
+        }
+        
+        /* Citations */
+        .citation {
+            font-size: 0.8rem;
+            color: var(--accent);
+            cursor: pointer;
+            vertical-align: super;
+        }
+        
+        .citation-list {
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 0.8rem;
+        }
+        
+        .citation-item {
+            margin-bottom: 10px;
+        }
+        
+        .citation-link {
+            color: var(--secondary);
+            text-decoration: none;
+        }
+        
+        .citation-link:hover {
+            text-decoration: underline;
+        }
+        
+        /* Animation */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.05); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Psychology Education Project</h1>
+        <h2>Katherine Mayorga</h2>
+    </header>
+    
+    <div class="container">
+        <div class="section">
+            <h3 class="section-title">The ADHD Brain</h3>
+                            <p class="section-content">
+                ADHD changes how the brain works. It affects the brain's command center which is the part that helps you plan and focus. 
+                Studies show that the brain wiring for attention is different in people with ADHD.<a href="#cite1" class="citation">[1]</a> 
+                Brain chemicals called dopamine and norepinephrine don't work the same way. This makes it harder to pay attention, 
+                stay focused, and control impulses.<a href="#cite2" class="citation">[2]</a>
+            </p>
+            <div class="brain-container">
+                <div class="brain">🧠</div>
+            </div>
+            <p class="section-content">
+                The front part of the brain (prefrontal cortex) has trouble talking to other brain areas in people with ADHD.
+                This causes problems with planning, getting distracted easily, acting without thinking, and forgetting things.<a href="#cite1" class="citation">[1]</a>
+                Dopamine is a brain chemical that helps you feel good when you accomplish something. With ADHD, there's often less dopamine.
+                This makes it hard to stay motivated, especially for boring tasks with no immediate reward.<a href="#cite3" class="citation">[3]</a>
+            </p>
+        </div>
+        
+        <div class="section">
+            <h3 class="section-title">Focus Challenge</h3>
+            <p class="section-content">
+                People with ADHD have a hard time staying focused when there are distractions. Their brains can't filter out 
+                unimportant stuff very well. It's also tough for them to manage feelings and stay on track with tasks.<a href="#cite4" class="citation">[4]</a>
+                Try this game to feel what it's like to have ADHD for a few minutes.
+                <strong>Your goal: Count backward from 100 by 3 and try to reach 70 before time runs out!</strong>
+            </p>
+            <div class="game-container">
+                <div class="focus-meter">
+                    <div class="focus-fill" id="focusFill"></div>
+                </div>
+                <div class="time-meter">
+                    <div class="time-fill" id="timeFill"></div>
+                </div>
+                <div class="task">Count backward from 100 by 3</div>
+                <div class="count-display" id="countDisplay">100</div>
+                <div class="distractions" id="distractions"></div>
+            </div>
+            <div style="text-align: center;">
+                <button id="startGame" class="button">Start Challenge</button>
+                <button id="nextCount" class="button" disabled>Next Count</button>
+                <button id="resetGame" class="button">Reset</button>
+            </div>
+            
+            <div class="game-explanation" id="gameExplanation">
+                <h4 style="margin-bottom: 10px; color: var(--accent);">What This Demonstrates</h4>
+                <p>
+                    In this minigame, you only needed to click away the distracting thoughts without even reading them, 
+                    and still, this made the simple counting task much more difficult. You had to clear all distractions 
+                    before you could continue counting - this represents how intrusive thoughts can completely block 
+                    task progression.
+                </p>
+                <p style="margin-top: 10px;">
+                    In real life, people with ADHD have to deal with these pop-up thoughts AND think about them too. 
+                    It's not that they're lazy or don't try hard enough. Their brains just work differently.<a href="#cite4" class="citation">[4]</a>
+                </p>
+                <p style="margin-top: 10px;">
+                    Imagine if you had to read each distraction and think about it. One thought leads to another and another.
+                    Then you have to try to get back to what you were doing. This is what people with ADHD face every day.
+                </p>
+                <p style="margin-top: 10px;">
+                    This simplified simulation only hints at what someone with ADHD might experience daily. 
+                    The real experience can be much more intense and varies widely from person to person.
+                </p>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h3 class="section-title">Treatment Approaches</h3>
+            <p class="section-content">
+                Doctors recommend using several types of treatments together for ADHD. This includes medicine, 
+                therapy, and lifestyle changes.<a href="#cite5" class="citation">[5]</a> Each type of treatment helps in different ways.
+                They work best when used together as a complete plan designed for each person.
+            </p>
+            <div class="card-container">
+                <div class="card">
+                    <div class="card-icon">💊</div>
+                    <h4 class="card-title">Medication</h4>
+                    <p>
+                        Medicines help balance brain chemicals. There are stimulant medicines (like Ritalin and Adderall)
+                        and non-stimulant medicines. These help people focus better, pay attention, and control their behavior.<a href="#cite5" class="citation">[5]</a>
+                    </p>
+                    <button class="treatment-info button" data-treatment="medication">Learn More</button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">🧠</div>
+                    <h4 class="card-title">Behavioral Therapy</h4>
+                    <p>
+                        Therapy helps people learn ways to cope with ADHD. This includes teaching parents how to help their kids,
+                        and showing people how to get organized and control their emotions. For young kids, doctors try therapy
+                        before medicine.<a href="#cite6" class="citation">[6]</a>
+                    </p>
+                    <button class="treatment-info button" data-treatment="therapy">Learn More</button>
+                </div>
+                
+                <div class="card">
+                    <div class="card-icon">🧘</div>
+                    <h4 class="card-title">Lifestyle Strategies</h4>
+                    <p>
+                        Exercise, good sleep, healthy food, and setting up your space right can really help with ADHD symptoms.<a href="#cite7" class="citation">[7]</a>
+                        These everyday habits work alongside medicine and therapy to help people with ADHD do better.
+                    </p>
+                    <button class="treatment-info button" data-treatment="lifestyle">Learn More</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="citation-list">
+            <h4 style="margin-bottom: 15px; color: var(--secondary);">References</h4>
+            <div id="cite1" class="citation-item">
+                [1] <a href="https://add.org/adhd-brain/" target="_blank" class="citation-link">ADD.org: Inside the ADHD Brain: Structure, Function, and Chemistry</a>
+            </div>
+            <div id="cite2" class="citation-item">
+                [2] <a href="https://www.additudemag.com/neuroscience-of-adhd-brain/" target="_blank" class="citation-link">ADDitude: The ADHD Brain: Neuroscience Behind Attention Deficit Disorder</a>
+            </div>
+            <div id="cite3" class="citation-item">
+                [3] <a href="https://www.healthline.com/health/adhd/adhd-dopamine" target="_blank" class="citation-link">Healthline: Dopamine and Attention Deficit Hyperactivity Disorder (ADHD)</a>
+            </div>
+            <div id="cite4" class="citation-item">
+                [4] <a href="https://www.choosingtherapy.com/how-to-focus-with-adhd/" target="_blank" class="citation-link">Choosing Therapy: ADHD Focus Strategies: 14 Therapist-Backed Tips for Success</a>
+            </div>
+            <div id="cite5" class="citation-item">
+                [5] <a href="https://www.sciencedirect.com/science/article/pii/S016372582100142X" target="_blank" class="citation-link">Science Direct: Evidence-based pharmacological treatment options for ADHD</a>
+            </div>
+            <div id="cite6" class="citation-item">
+                [6] <a href="https://www.cdc.gov/adhd/treatment/index.html" target="_blank" class="citation-link">CDC: Treatment of ADHD</a>
+            </div>
+            <div id="cite7" class="citation-item">
+                [7] <a href="https://www.helpguide.org/mental-health/adhd/managing-adult-adhd" target="_blank" class="citation-link">HelpGuide: Tips for Managing Adult ADHD</a>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Modal Overlay -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-content">
+            <div class="modal-close" id="modalClose">✕</div>
+            <h3 class="modal-title" id="modalTitle">Treatment Information</h3>
+            <div class="modal-body" id="modalBody">
+                Modal content goes here.
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Wait for DOM to fully load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Focus Challenge Game
+            let gameInterval;
+            let timerInterval;
+            let focusLevel = 100;
+            let timeRemaining = 100;
+            let currentCount = 100;
+            let gameActive = false;
+            
+            document.getElementById('startGame').addEventListener('click', function() {
+                if (gameActive) return;
+                
+                // Reset game state
+                focusLevel = 100;
+                timeRemaining = 100;
+                currentCount = 100;
+                gameActive = true;
+                
+                // Update UI
+                updateFocusMeter();
+                updateTimeMeter();
+                document.getElementById('countDisplay').textContent = currentCount;
+                document.getElementById('nextCount').disabled = true; // Start with disabled until no distractions
+                document.getElementById('startGame').disabled = true;
+                document.getElementById('gameExplanation').style.display = 'none';
+                
+                // Clear existing distractions and intervals
+                document.getElementById('distractions').innerHTML = '';
+                clearInterval(gameInterval);
+                clearInterval(timerInterval);
+                
+                // Start creating distractions
+                gameInterval = setInterval(createDistraction, 2000); // Less frequent distractions (2000ms instead of 1500ms)
+                
+                // Start timer
+                timerInterval = setInterval(function() {
+                    timeRemaining -= 0.7; // Slower timer (0.7 instead of 1)
+                    updateTimeMeter();
+                    
+                    // Check if game over
+                    if (timeRemaining <= 0 || currentCount <= 70) {
+                        endGame();
+                    }
+                }, 100);
+                
+                // Enable next count button initially as no distractions
+                checkDistractions();
+            });
+            
+            document.getElementById('resetGame').addEventListener('click', function() {
+                // Clear distractions and intervals
+                document.getElementById('distractions').innerHTML = '';
+                clearInterval(gameInterval);
+                clearInterval(timerInterval);
+                
+                // Reset game state
+                focusLevel = 100;
+                timeRemaining = 100;
+                currentCount = 100;
+                gameActive = false;
+                
+                // Update UI
+                updateFocusMeter();
+                updateTimeMeter();
+                document.getElementById('countDisplay').textContent = currentCount;
+                document.getElementById('nextCount').disabled = true;
+                document.getElementById('startGame').disabled = false;
+                document.getElementById('gameExplanation').style.display = 'none';
+            });
+            
+            document.getElementById('nextCount').addEventListener('click', function() {
+                if (!gameActive) return;
+                
+                // Update count
+                currentCount -= 3;
+                document.getElementById('countDisplay').textContent = currentCount;
+                
+                // Check if goal reached
+                if (currentCount <= 70) {
+                    endGame();
+                }
+            });
+            
+            // Function to check for distractions and enable/disable next count button
+            function checkDistractions() {
+                const hasDistractions = document.getElementById('distractions').children.length > 0;
+                document.getElementById('nextCount').disabled = hasDistractions || !gameActive;
+                
+                // Visual indicator for the button
+                if (hasDistractions && gameActive) {
+                    document.getElementById('nextCount').style.opacity = "0.5";
+                    document.getElementById('nextCount').title = "Clear all distractions first!";
+                } else {
+                    document.getElementById('nextCount').style.opacity = gameActive ? "1" : "0.5";
+                    document.getElementById('nextCount').title = gameActive ? "Click to count down" : "Start game first";
+                }
+            }
+            
+            function createDistraction() {
+                const distractions = [
+                    "Check your phone!",
+                    "What's for dinner?",
+                    "Remember that song?",
+                    "Is the door locked?",
+                    "New notification!",
+                    "Did you feed the pet?",
+                    "What was that noise?",
+                    "You're getting hungry",
+                    "Check social media",
+                    "What time is it?",
+                    "Need to do laundry",
+                    "Feeling tired?",
+                    "Check email",
+                    "Water your plants",
+                    "Call your friend",
+                    "Car needs gas",
+                    "Random thought!"
+                ];
+                
+                const container = document.getElementById('distractions');
+                const distraction = document.createElement('div');
+                distraction.classList.add('distraction');
+                
+                // Random position
+                const maxWidth = container.clientWidth - 150;
+                const maxHeight = container.clientHeight - 40;
+                const xPos = Math.random() * maxWidth;
+                const yPos = Math.random() * maxHeight;
+                
+                distraction.style.left = xPos + 'px';
+                distraction.style.top = yPos + 'px';
+                
+                // Random content
+                const randomIndex = Math.floor(Math.random() * distractions.length);
+                distraction.textContent = distractions[randomIndex];
+                
+                // Add click handler
+                distraction.addEventListener('click', function() {
+                    distraction.remove();
+                    // Increase focus slightly when distraction is removed
+                    focusLevel = Math.min(100, focusLevel + 8); // Increased recovery (8% instead of 5%)
+                    updateFocusMeter();
+                    
+                    // Check if there are any distractions left
+                    checkDistractions();
+                });
+                
+                container.appendChild(distraction);
+                
+                // Reduce focus level
+                focusLevel = Math.max(0, focusLevel - 7); // Reduced penalty (7% instead of 10%)
+                updateFocusMeter();
+                
+                // Check distractions after adding
+                checkDistractions();
+                
+                // Auto-remove after a while if not clicked
+                setTimeout(function() {
+                    if (distraction.parentNode === container) {
+                        distraction.remove();
+                        // Check distractions after removing
+                        checkDistractions();
+                    }
+                }, 3500); // Shorter duration (3500ms instead of 4000ms)
+            }
+            
+            function updateFocusMeter() {
+                document.getElementById('focusFill').style.width = focusLevel + '%';
+                
+                // Visual feedback based on focus level
+                if (focusLevel < 30) {
+                    document.getElementById('focusFill').style.background = 'linear-gradient(90deg, #ff0000, #ff4500)';
+                } else if (focusLevel < 70) {
+                    document.getElementById('focusFill').style.background = 'linear-gradient(90deg, #ffa500, #ffff00)';
+                } else {
+                    document.getElementById('focusFill').style.background = 'linear-gradient(90deg, var(--primary), var(--secondary))';
+                }
+            }
+            
+            function updateTimeMeter() {
+                document.getElementById('timeFill').style.width = timeRemaining + '%';
+            }
+            
+            function endGame() {
+                // Stop intervals
+                clearInterval(gameInterval);
+                clearInterval(timerInterval);
+                
+                // Reset game state
+                gameActive = false;
+                document.getElementById('nextCount').disabled = true;
+                document.getElementById('startGame').disabled = false;
+                
+                // Clear distractions
+                document.getElementById('distractions').innerHTML = '';
+                
+                // Update button appearance
+                document.getElementById('nextCount').style.opacity = "0.5";
+                
+                // Show explanation
+                document.getElementById('gameExplanation').style.display = 'block';
+                
+                // Show result message
+                let resultMessage = "";
+                if (currentCount <= 70) {
+                    resultMessage = "Congratulations! You reached the goal of 70.";
+                } else {
+                    resultMessage = "Time's up! You reached " + currentCount + ". Try again!";
+                }
+                
+                alert(resultMessage);
+            }
+            
+            // Additional event listener for Next Count button
+            document.getElementById('nextCount').addEventListener('click', function() {
+                if (!gameActive) return;
+                
+                // Check if there are still distractions
+                const hasDistractions = document.getElementById('distractions').children.length > 0;
+                if (hasDistractions) {
+                    // Give feedback to the user
+                    alert("Clear all distractions first!");
+                    return;
+                }
+                
+                // Update count
+                currentCount -= 3;
+                document.getElementById('countDisplay').textContent = currentCount;
+                
+                // Check if goal reached
+                if (currentCount <= 70) {
+                    endGame();
+                } else {
+                    // Add a small amount of time as a reward for progressing
+                    timeRemaining = Math.min(100, timeRemaining + 5);
+                    updateTimeMeter();
+                }
+            });
+            
+            // Treatment Information Modals
+            const treatmentButtons = document.querySelectorAll('.treatment-info');
+            const modalOverlay = document.getElementById('modalOverlay');
+            const modalClose = document.getElementById('modalClose');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            
+            treatmentButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const treatment = this.getAttribute('data-treatment');
+                    let title = '';
+                    let content = '';
+                    
+                    switch(treatment) {
+                        case 'medication':
+                            title = 'Medication Treatment for ADHD';
+                            content = `
+                                <p>ADHD medicines work on brain chemicals to help the brain's control center work better. There are two main types:</p>
+                                
+                                <h4 style="color: var(--accent); margin: 15px 0 10px;">Stimulant Medicines</h4>
+                                <p>
+                                    Stimulants are the most common ADHD medicines. They boost brain chemicals called dopamine and norepinephrine.
+                                    These include:
+                                </p>
+                                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                    <li><strong>Methylphenidate types</strong>: Ritalin, Concerta, Focalin</li>
+                                    <li><strong>Amphetamine types</strong>: Adderall, Vyvanse</li>
+                                </ul>
+                                <p>These work fast (in about 30-60 minutes) and help about 7-8 out of 10 people with ADHD.<a href="#cite5" class="citation">[5]</a></p>
+                                
+                                <h4 style="color: var(--accent); margin: 15px 0 10px;">Non-Stimulant Medicines</h4>
+                                <p>
+                                    These work differently and can help people who don't do well with stimulants:
+                                </p>
+                                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                    <li><strong>Strattera</strong>: Works on the brain chemical norepinephrine</li>
+                                    <li><strong>Intuniv and Kapvay</strong>: Help control brain signals</li>
+                                    <li><strong>Some antidepressants</strong>: Sometimes used for ADHD</li>
+                                </ul>
+                                
+                                <p>It takes time to find the right medicine and dose. A doctor needs to watch how it's working and make changes if needed.<a href="#cite6" class="citation">[6]</a> For kids under 6, doctors try behavior therapy first before giving medicine.</p>
+                            `;
+                            break;
+                        case 'therapy':
+                            title = 'Behavioral Therapy for ADHD';
+                            content = `
+                                <p>Therapy helps people learn skills to manage their ADHD better:</p>
+                                
+                                <h4 style="color: var(--accent); margin: 15px 0 10px;">Parent Training</h4>
+                                <p>
+                                    For young kids with ADHD, teaching parents how to help is the first step before trying medicine.<a href="#cite6" class="citation">[6]</a> Parents learn:
+                                </p>
+                                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                    <li>How to talk positively with their child</li>
+                                    <li>Good ways to handle behavior problems</li>
+                                    <li>How to reward good behaviors</li>
+                                    <li>Ways to create routines that help their child succeed</li>
+                                </ul>
+                                
+                                <h4 style="color: var(--accent); margin: 15px 0 10px;">Cognitive-Behavioral Therapy (CBT)</h4>
+                                <p>
+                                    CBT helps people change unhelpful thoughts and actions. For ADHD, it teaches:
+                                </p>
+                                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                    <li>Ways to get organized</li>
+                                    <li>How to manage time better</li>
+                                    <li>How to stop putting things off</li>
+                                    <li>Ways to solve problems</li>
+                                    <li>How to handle emotions and stress</li>
+                                </ul>
+                                
+                                <h4 style="color: var(--accent); margin: 15px 0 10px;">Other Helpful Approaches</h4>
+                                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                    <li><strong>ADHD Coaching</strong>: Gives practical help and keeps you on track</li>
+                                    <li><strong>Social Skills Training</strong>: Helps with making friends and talking to others</li>
+                                    <li><strong>Organization Training</strong>: Teaches how to plan and finish tasks</li>
+                                </ul>
+                                
+                                <p>Therapy works best when used along with medicine and healthy habits as part of a complete treatment plan.<a href="#cite6" class="citation">[6]</a></p>
+                            `;
+                            break;
+                        case 'lifestyle':
+                            title = 'Lifestyle Strategies for ADHD';
+                            content = `
+                                <p>Simple daily habits can really help manage ADHD symptoms:</p>
+                                
+                                <h4 style="color: var(--accent); margin: 15px 0 10px;">Exercise</h4>
+                                <p>
+                                    Moving your body regularly helps with ADHD by:
+                                </p>
+                                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                    <li>Boosting the same brain chemicals that ADHD medicines target<a href="#cite7" class="citation">[7]</a></li>
+                                    <li>Helping you focus better and be less hyperactive</li>
+                                    <li>Making you feel happier and less anxious</li>
+                                    <li>Making your brain work better overall</li>
+                                </ul>
+                                <p>Activities like running, swimming, biking, and martial arts work especially well.<a href="#cite8" class="citation">[8]</a></p>
+                                
+                                <h4 style="color: var(--accent); margin: 15px 0 10px;">Better Sleep</h4>
+                                <p>
+                                    Not getting enough sleep makes ADHD worse. These tips help you sleep better:
+                                </p>
+                                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                    <li>No caffeine (coffee, tea, soda) late in the day</li>
+                                    <li>Having the same bedtime routine every night</li>
+                                    <li>Going to bed and waking up at the same time every day</li>
+                                    <li>Exercising regularly (but not right before bed)<a href="#cite7" class="citation">[7]</a></li>
+                                </ul>
+                                
+                                <h4 style="color: var(--accent); margin: 15px 0 10px;">Healthy Food</h4>
+                                <p>
+                                    While diet can't cure ADHD, these eating habits may help:
+                                </p>
+                                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                    <li>Eating small meals throughout the day</li>
+                                    <li>Having protein (meat, eggs, beans) at each meal</li>
+                                    <li>Cutting down on sugar and junk food</li>
+                                    <li>Getting enough omega-3s (from fish), zinc, iron, and vitamin D<a href="#cite9" class="citation">[9]</a></li>
+                                </ul>
+                                
+                                <h4 style="color: var(--accent); margin: 15px 0 10px;">Setting Up Your Space</h4>
+                                <ul style="margin-left: 20px; margin-bottom: 15px;">
+                                    <li><strong>Get Organized</strong>: Use calendars, sticky notes, and planners</li>
+                                    <li><strong>Reduce Distractions</strong>: Find quiet places to work and use headphones if needed</li>
+                                    <li><strong>Manage Time</strong>: Use timers and break big tasks into smaller steps</li>
+                                </ul>
+                                
+                                <div id="cite8" class="citation-item">
+                                    [8] <a href="https://www.relationalpsych.group/articles/adhd-and-exercise-how-physical-activity-can-improve-focus-and-reduce-symptoms" target="_blank" class="citation-link">Relational Psych: ADHD and Exercise: How Physical Activity Can Improve Focus</a>
+                                </div>
+                                <div id="cite9" class="citation-item">
+                                    [9] <a href="https://www.additudemag.com/adhd-lifestyle-changes-food-sleep-exercise-genes-environment/" target="_blank" class="citation-link">ADDitude: Beyond Genes: Leveraging Sleep, Exercise, and Nutrition to Improve ADHD</a>
+                                </div>
+                            `;
+                            break;
+                    }
+                    
+                    // Update and show modal
+                    modalTitle.textContent = title;
+                    modalBody.innerHTML = content;
+                    modalOverlay.classList.add('active');
+                });
+            });
+            
+            // Close modal
+            modalClose.addEventListener('click', function() {
+                modalOverlay.classList.remove('active');
+            });
+            
+            // Close modal when clicking outside
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === modalOverlay) {
+                    modalOverlay.classList.remove('active');
+                }
+            });
+            
+            // Make citations clickable
+            document.querySelectorAll('.citation').forEach(citation => {
+                citation.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        targetElement.scrollIntoView({ behavior: 'smooth' });
+                        // Highlight briefly
+                        targetElement.style.backgroundColor = 'rgba(255, 255, 255, 0.2)';
+                        setTimeout(() => {
+                            targetElement.style.backgroundColor = 'transparent';
+                        }, 1500);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>
